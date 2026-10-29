@@ -86,13 +86,8 @@ function attach() {
     log('#editor plain text', describe(info));
   }, { signal });
 
-  // 5. Files only.
-  //
-  // NOTE: `{ types: 'image/*' }` does not work in onpaste 0.1.0 — the filter is
-  // matched against `clipboardData.types`, which is `['Files']` for a file
-  // paste, never `image/png`. So we filter on `info.files` ourselves instead.
+  // 5. Files only — the handler never fires for text-only pastes.
   onPaste('#composer', ({ files, insert }) => {
-    if (!files.some((f) => f.type.startsWith('image/'))) return;
     log('#composer image', files.map((f) => `${f.type} ${f.size}B`).join(', '));
     insert(files.map((f) => `[image: ${f.name || 'clipboard'}]`).join(' '));
     for (const file of files) {
@@ -102,7 +97,7 @@ function attach() {
       img.addEventListener('load', () => URL.revokeObjectURL(img.src), { once: true });
       thumbsEl.append(img);
     }
-  }, { signal });
+  }, { signal, types: 'image/*' });
 
   // 6. Delegation — one listener on the container covers rows added later.
   onPaste('#tags', ({ target, text }) => {
