@@ -97,6 +97,22 @@
           <button type="button" id="add-tag" class="ghost">Add another row</button>
         </fieldset>
 
+        <fieldset>
+          <legend>Confirmations</legend>
+
+          <label for="passcode">
+            Passcode
+            <small><code>preventDefault: true</code> → blocks the paste and explains with <code>alert()</code></small>
+          </label>
+          <input id="passcode" name="passcode" type="text" placeholder="Try pasting — it will not land" />
+
+          <label for="confirm">
+            Reviewed paste
+            <small>a custom modal holds the clipboard text until you accept it</small>
+          </label>
+          <textarea id="confirm" name="confirm" rows="3" placeholder="Paste anything — you get a preview first"></textarea>
+        </fieldset>
+
         <div class="actions">
           <button type="submit">Submit</button>
           <button type="reset" class="ghost">Reset</button>
@@ -115,6 +131,18 @@
         <ol id="log" class="log" aria-live="polite"></ol>
       </section>
     </main>
+
+    <dialog id="paste-modal" class="modal">
+      <form method="dialog">
+        <h2>Paste into “Reviewed paste”?</h2>
+        <p id="paste-modal-meta" class="modal-meta"></p>
+        <pre id="paste-modal-preview" class="modal-preview"></pre>
+        <div class="modal-actions">
+          <button value="cancel" class="ghost" formnovalidate>Discard</button>
+          <button value="accept" autofocus>Insert text</button>
+        </div>
+      </form>
+    </dialog>
 
     <script type="module" src="/src/main.js"></script>
   </body>

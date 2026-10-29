@@ -18,6 +18,8 @@ The form covers, one fieldset at a time:
 | Rich field | `onPastePlainText` on a `contenteditable` (double-click calls `insertText`) |
 | Composer | `types: 'image/*'` plus `info.insert()` and thumbnails from `info.files` |
 | Tags | `selector` delegation — rows added later are covered by the same listener |
+| Passcode | `preventDefault: true` blocking the paste, with a native `alert()` explaining why |
+| Reviewed paste | a custom `<dialog>` holding the paste until the user accepts, then `insertText` |
 
 Every listener shares one `AbortSignal`; the "Listeners attached" checkbox
 aborts and reattaches the whole set. All pastes are logged in the panel at the

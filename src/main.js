@@ -103,6 +103,43 @@ function attach() {
   onPaste('#tags', ({ target, text }) => {
     log('#tags delegated', `${target.tagName.toLowerCase()} ← ${JSON.stringify(text)}`);
   }, { signal, selector: 'input' });
+
+  // 7. Native alert — the paste never lands, and the user is told why.
+  onPaste('#passcode', ({ text }) => {
+    log('#passcode blocked', `${text.length} char(s) kept out of the field`);
+    alert('For your own security, type your passcode instead of pasting it.');
+  }, { signal, preventDefault: true });
+
+  // 8. Custom modal — hold the paste, show a preview, insert only on accept.
+  onPaste('#confirm', (info) => {
+    info.preventDefault();
+    log('#confirm held', describe(info));
+    confirmPaste(info).then((accepted) => {
+      if (!accepted) {
+        log('#confirm discarded', 'the user dismissed the modal — nothing inserted');
+        return;
+      }
+      insertText(info.target, info.text);
+      info.target.focus();
+      log('#confirm inserted', `${info.text.length} char(s) written after confirmation`);
+    });
+  }, { signal });
+}
+
+// The modal is a plain <dialog>; onPaste only has to stop the native paste
+// long enough for the answer to come back.
+const modal = document.querySelector('#paste-modal');
+const modalMeta = document.querySelector('#paste-modal-meta');
+const modalPreview = document.querySelector('#paste-modal-preview');
+
+function confirmPaste({ text, types }) {
+  const lines = text ? text.split(/\r?\n/).length : 0;
+  modalMeta.textContent = `${text.length} character(s), ${lines} line(s) — ${types.join(', ') || 'no types'}`;
+  modalPreview.textContent = text.slice(0, 400) + (text.length > 400 ? '…' : '');
+  modal.showModal();
+  return new Promise((resolve) => {
+    modal.addEventListener('close', () => resolve(modal.returnValue === 'accept'), { once: true });
+  });
 }
 
 attach();

@@ -193,3 +193,38 @@ button.ghost {
   font-size: .82rem;
   color: var(--muted);
 }
+
+.modal {
+  width: min(32rem, calc(100vw - 2rem));
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel);
+  color: var(--text);
+}
+
+.modal::backdrop { background: rgb(0 0 0 / .45); }
+
+.modal h2 { margin: 0 0 .35rem; font-size: 1rem; }
+
+.modal-meta { margin: 0 0 .6rem; color: var(--muted); font-size: .85rem; }
+
+.modal-preview {
+  margin: 0;
+  max-height: 11rem;
+  overflow: auto;
+  padding: .6rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: .82rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: .5rem;
+  margin-top: 1rem;
+}
