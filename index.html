@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>onpaste playground</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>onpaste playground</h1>
+        <p>Paste into any field below — each one wires <code>onPaste</code> differently.</p>
+      </header>
+
+      <form id="demo" autocomplete="off">
+        <fieldset>
+          <legend>Plain listener</legend>
+
+          <label for="title">
+            Title
+            <small>logs the payload, paste behaves normally</small>
+          </label>
+          <input id="title" name="title" type="text" placeholder="Paste anything" />
+        </fieldset>
+
+        <fieldset>
+          <legend>transform</legend>
+
+          <label for="slug">
+            Slug
+            <small><code>transform</code> → trimmed, lowercased, dash-separated</small>
+          </label>
+          <input id="slug" name="slug" type="text" placeholder="Paste &ldquo;  Hello World  &rdquo;" />
+
+          <label for="phone">
+            Phone
+            <small><code>transform</code> → digits and a leading + only</small>
+          </label>
+          <input id="phone" name="phone" type="tel" placeholder="Paste (555) 010-2030" />
+
+          <label for="amount">
+            Amount
+            <small><code>transform</code> → drops the paste unless it is a number</small>
+          </label>
+          <input id="amount" name="amount" type="text" placeholder="Paste 1234.50" />
+        </fieldset>
+
+        <fieldset>
+          <legend>Textareas</legend>
+
+          <label for="notes">
+            Notes
+            <small>plain <code>onPaste</code>, counts characters pasted</small>
+          </label>
+          <textarea id="notes" name="notes" rows="4" placeholder="Paste a few paragraphs"></textarea>
+
+          <label for="csv">
+            One per line
+            <small><code>transform</code> → tabs and commas become newlines</small>
+          </label>
+          <textarea id="csv" name="csv" rows="4" placeholder="Paste a spreadsheet row"></textarea>
+        </fieldset>
+
+        <fieldset>
+          <legend>contenteditable</legend>
+
+          <label for="editor">
+            Rich field
+            <small><code>onPastePlainText</code> → formatting stripped on paste</small>
+          </label>
+          <div id="editor" class="editor" contenteditable="true" role="textbox" aria-multiline="true"
+               data-placeholder="Copy some styled text from a web page and paste it here"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Files</legend>
+
+          <label for="composer">
+            Composer
+            <small>filters <code>info.files</code> → only reacts to pasted images</small>
+          </label>
+          <textarea id="composer" name="composer" rows="3" placeholder="Copy an image, then paste here"></textarea>
+          <div id="thumbs" class="thumbs" aria-live="polite"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Delegation</legend>
+
+          <label>
+            Tags
+            <small>one listener on the container, <code>selector: 'input'</code> — new rows work too</small>
+          </label>
+          <div id="tags" class="tags">
+            <input name="tag" type="text" placeholder="Paste a tag" />
+          </div>
+          <button type="button" id="add-tag" class="ghost">Add another row</button>
+        </fieldset>
+
+        <div class="actions">
+          <button type="submit">Submit</button>
+          <button type="reset" class="ghost">Reset</button>
+          <label class="toggle">
+            <input type="checkbox" id="armed" checked />
+            Listeners attached
+          </label>
+        </div>
+      </form>
+
+      <section class="log-panel">
+        <div class="log-head">
+          <h2>Paste log</h2>
+          <button type="button" id="clear-log" class="ghost">Clear</button>
+        </div>
+        <ol id="log" class="log" aria-live="polite"></ol>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
